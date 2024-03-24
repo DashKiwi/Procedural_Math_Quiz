@@ -15,11 +15,18 @@ def float_checker(prompt):
         except:
             print("Please enter a valid Number")
 
+def get_question_types(prompt):
+    while True:
+        user_input = input(prompt).upper()
+        if user_input in ["+", "-", "X", "/", "ALL"]:
+            return user_input
+        else:
+            print("Please choose +, X, /, - or all to begin")
 
 def one_question(number):
     global question_types, correct_answers, previous_questions, previous_answers, previous_user_answers
     correct_answer = 0
-    print("Question {}\n".format(number))
+    print("~~~~~~ Question {} ~~~~~~\n".format(number))
     # Chooses 2 random numbers
     number_one = random.randrange(1, 20)
     number_two = random.randrange(1, 20)
@@ -44,7 +51,7 @@ def one_question(number):
 
     #checks if the answer is correct
     if correct_answer == user_answer:
-        print("Yay you got it right!\n")
+        print("Congratulations you got it right!\n")
         correct_answers += 1
     else:
         print("Oh no you got it wrong. The correct answer was {}!".format(correct_answer))
@@ -66,36 +73,27 @@ print(".___  ___.      ___   .___________. __    __       ______      __    __  
 while True:
     #resets the question types when rerun
     question_types = ["+", "/", "-", "x"]
+    print("~~~~~~ SETTINGS ~~~~~~")
     #asks what type of operator they want
-    operator_input = input("Please choose one of the following operators or type all for all of them (+, X, /, -)\n").upper()
-    #checks the users answer
-    if operator_input == "ALL":
-        pass
-    elif operator_input == "+":
-        question_types = ["+"]
-    elif operator_input == "X":
-        question_types = ["x"]
-    elif operator_input == "/":
-        question_types = ["/"]
-    elif operator_input == "-":
-        question_types = ["-"]
-    else:
-        print("Please choose +, X, /, - or all to begin")
+    operator_input = get_question_types("Please choose one of the following operators or type all for all of them (+, X, /, -)\n")
     #asks how many rounds they want to play
-    round_input = int(input("How many rounds do you want to play?\n"))
+    round_input = int(float_checker("How many rounds do you want to play?\n"))
     #for every round they want to play add 1 to the count and run one_question with the count paramater
     for i in range(round_input):
         count += 1
         one_question(count)
+    print("~~~~~~ REPLAY ~~~~~~")
     #asks after the code has finished if they want another question
-    user_input = input("Would you like another question? (Y/N)\n").upper()
+    replay_input = input("Would you like another question? (Y/N)\n").upper()
     #if the user answer is yes it reruns the code in this code block
-    if user_input == "YES" or user_input == "Y":         
+    if replay_input == "YES" or replay_input == "Y":         
         pass
     #if the answer is no then end the code
-    elif user_input == "NO" or user_input == "N":
+    elif replay_input == "NO" or replay_input == "N":
         print("~~~~~~ SUMMARY ~~~~~~")
         print("Your Score was {}/{} questions correct!".format(correct_answers, count))
         print("~~~~~~ HISTORY ~~~~~~")
+        for i in range(len(previous_questions)):
+            print(f"{previous_questions[i]}Correct Answer: {previous_answers[i]}\nYour Answer: {previous_user_answers[i]}")
         print("Thank you for playing come back soon!")
         break
